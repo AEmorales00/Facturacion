@@ -1,0 +1,243 @@
+/* ============================================================
+   ESTILOS DEL SISTEMA POS - FACTURACION
+   Todo en un solo archivo, ordenado por secciones.
+   ============================================================ */
+
+/* ---------- 1. BASE ---------- */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #333333;
+    margin: 0;
+    padding: 20px 30px;
+}
+
+/* ---------- 2. ENCABEZADO ---------- */
+.encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 3px solid #1a73e8;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.encabezado h1 {
+    color: #1a73e8;
+    font-size: 26px;
+    margin: 0 0 5px 0;
+}
+
+.encabezado .derecha {
+    text-align: right;
+    font-size: 14px;
+}
+
+.en-linea  { color: #2e7d32; font-weight: bold; }
+.sin-linea { color: #c62828; font-weight: bold; }
+
+/* ---------- 3. MENU ---------- */
+.menu {
+    margin-bottom: 20px;
+}
+
+.menu a {
+    display: inline-block;
+    padding: 8px 14px;
+    margin-right: 6px;
+    background: #eef2f7;
+    color: #1a73e8;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.menu a:hover   { background: #dce6f5; }
+.menu a.activo  { background: #1a73e8; color: #ffffff; }
+
+/* ---------- 4. SECCIONES (las cajas grises) ---------- */
+.seccion {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 15px 20px;
+    margin-bottom: 18px;
+}
+
+.seccion h2 {
+    font-size: 16px;
+    margin: 0 0 12px 0;
+    color: #444444;
+}
+
+.fila {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ---------- 5. FORMULARIOS ---------- */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 15px;
+    font-family: inherit;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #1a73e8;
+}
+
+input[readonly] {
+    background: #e9ecef;
+}
+
+.ancho-total { flex: 1; }
+
+/* ---------- 6. BOTONES ---------- */
+.boton {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.boton-azul  { background: #1a73e8; color: #ffffff; }
+.boton-verde { background: #28a745; color: #ffffff; }
+.boton-rojo  { background: #dc3545; color: #ffffff; padding: 6px 12px; }
+.boton-gris  { background: #6c757d; color: #ffffff; }
+.boton:hover { opacity: 0.9; }
+
+/* ---------- 7. TABLAS ---------- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    font-size: 15px;
+}
+
+th {
+    background: #f1f3f5;
+    text-align: left;
+    padding: 12px 10px;
+    border: 1px solid #dee2e6;
+    font-size: 14px;
+}
+
+td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+}
+
+td.centro  { text-align: center; }
+td.derecha { text-align: right; }
+
+.vacio {
+    text-align: center;
+    color: #888888;
+    padding: 20px;
+}
+
+/* ---------- 8. PIE: TIPO DE CAMBIO Y TOTALES ---------- */
+.pie {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.caja-cambio {
+    flex: 1;
+    background: #e8f0fe;
+    border: 1px solid #b3d1ff;
+    border-radius: 6px;
+    padding: 15px 20px;
+}
+
+.caja-cambio h3 { margin: 0 0 6px 0; font-size: 17px; color: #222222; }
+.caja-cambio .valor  { font-size: 20px; }
+.caja-cambio .valor strong { color: #1a73e8; }
+.caja-cambio .fuente { font-size: 13px; color: #666666; margin-top: 4px; }
+
+.caja-totales { flex: 1; }
+
+.caja-totales .linea {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 16px;
+}
+
+.caja-totales .separador {
+    border-top: 2px solid #cccccc;
+    margin: 8px 0;
+}
+
+.total-usd { color: #2e7d32; font-weight: bold; font-size: 19px; }
+.total-gtq { color: #1a73e8; font-weight: bold; font-size: 21px; }
+
+/* ---------- 9. MENSAJES ---------- */
+.mensaje {
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 15px;
+}
+
+.mensaje-ok    { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.mensaje-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+/* ---------- 10. VENTANA MODAL (nuevo cliente) ---------- */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal.visible { display: flex; align-items: center; justify-content: center; }
+
+.modal-caja {
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 8px;
+    width: 420px;
+}
+
+.modal-caja h2 { margin-top: 0; color: #1a73e8; }
+.modal-caja input { width: 100%; margin-bottom: 10px; }
+
+/* ---------- 11. DEMO DEL WEB SERVICE ---------- */
+.bloque-xml {
+    background: #263238;
+    color: #aed581;
+    padding: 15px;
+    border-radius: 6px;
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 320px;
+    overflow: auto;
+}
+
+.paso {
+    border-left: 4px solid #1a73e8;
+    padding-left: 15px;
+    margin-bottom: 22px;
+}
+
+.paso h3 { margin: 0 0 8px 0; color: #1a73e8; font-size: 16px; }
