@@ -17,6 +17,55 @@ var carrito = [];      // aqui se van guardando los productos de la venta
 /* ------------------------------------------------------------
    1. CLIENTE
    ------------------------------------------------------------ */
+/* Deja el cliente puesto en la factura (los tres campos de arriba
+   y tambien seleccionado en la lista desplegable). */
+function pintarCliente(cliente) {
+    document.getElementById('cliente_id').value        = cliente.id;
+    document.getElementById('nombre_cliente').value    = cliente.nombre;
+    document.getElementById('direccion_cliente').value = cliente.direccion;
+    document.getElementById('lista_clientes').value    = cliente.id;
+}
+
+/* Busca un cliente en la lista que PHP dejo en la variable CLIENTES
+   (ver el <script> del final de index.php). No consulta al servidor. */
+function buscarEnClientes(id) {
+    for (var i = 0; i < CLIENTES.length; i++) {
+        if (String(CLIENTES[i].id) === String(id)) {
+            return CLIENTES[i];
+        }
+    }
+    return null;
+}
+
+/* FORMA A: el cajero elige el cliente de la lista desplegable */
+function seleccionarCliente() {
+    var lista   = document.getElementById('lista_clientes');
+    var cliente = buscarEnClientes(lista.value);
+
+    if (!cliente) {
+        limpiarCliente();
+        return;
+    }
+
+    document.getElementById('nit').value = cliente.nit;
+    pintarCliente(cliente);
+}
+
+/* Boton "Facturar" de la tabla de clientes (panel de abajo) */
+function seleccionarDesdePanel(id) {
+    var cliente = buscarEnClientes(id);
+
+    if (!cliente) {
+        alert('Cliente no encontrado');
+        return;
+    }
+
+    document.getElementById('nit').value = cliente.nit;
+    pintarCliente(cliente);
+    window.scrollTo(0, 0);   // subimos para que se vea el cliente puesto
+}
+
+/* FORMA B: buscarlo por NIT (consulta al servidor) */
 function buscarCliente() {
     var nit = document.getElementById('nit').value.trim();
 
@@ -33,9 +82,7 @@ function buscarCliente() {
                 limpiarCliente();
                 return;
             }
-            document.getElementById('cliente_id').value        = datos.cliente.id;
-            document.getElementById('nombre_cliente').value    = datos.cliente.nombre;
-            document.getElementById('direccion_cliente').value = datos.cliente.direccion;
+            pintarCliente(datos.cliente);
         });
 }
 
@@ -43,6 +90,7 @@ function limpiarCliente() {
     document.getElementById('cliente_id').value        = '';
     document.getElementById('nombre_cliente').value    = '';
     document.getElementById('direccion_cliente').value = '';
+    document.getElementById('lista_clientes').value    = '';
 }
 
 function abrirModalCliente()  { document.getElementById('modal_cliente').classList.add('visible'); }
@@ -62,11 +110,17 @@ function guardarCliente() {
                 alert(resultado.mensaje);
                 return;
             }
-            // Dejamos el cliente nuevo seleccionado en la factura
-            document.getElementById('cliente_id').value        = resultado.cliente.id;
-            document.getElementById('nit').value               = resultado.cliente.nit;
-            document.getElementById('nombre_cliente').value    = resultado.cliente.nombre;
-            document.getElementById('direccion_cliente').value = resultado.cliente.direccion;
+            /* Lo agregamos a la lista desplegable sin recargar la pagina
+               y lo dejamos seleccionado en la factura */
+            CLIENTES.push(resultado.cliente);
+
+            var opcion  = document.createElement('option');
+            opcion.value       = resultado.cliente.id;
+            opcion.textContent = resultado.cliente.nit + '  -  ' + resultado.cliente.nombre;
+            document.getElementById('lista_clientes').appendChild(opcion);
+
+            document.getElementById('nit').value = resultado.cliente.nit;
+            pintarCliente(resultado.cliente);
             cerrarModalCliente();
         });
 }
@@ -75,49 +129,82 @@ function guardarCliente() {
 /* ------------------------------------------------------------
    2. PRODUCTOS
    ------------------------------------------------------------ */
-function agregarProducto() {
-    var campo = document.getElementById('buscar_producto');
-    var texto = campo.value.trim();
+/* Mete un producto al carrito (o le suma cantidad si ya estaba).
+   Lo usan las dos formas de agregar: la lista desplegable de la seccion 2
+   y el boton "+ Agregar" del catalogo. */
+function agregarAlCarrito(producto, cantidad) {
+    cantidad = parseInt(cantidad, 10);
 
-    if (texto === '') {
-        alert('Escriba el codigo o el nombre del producto');
+    if (isNaN(cantidad) || cantidad < 1) {
+        cantidad = 1;
+    }
+
+    // Los ids de la BD llegan como texto, por eso los comparamos como texto
+    var id       = String(producto.id);
+    var repetido = null;
+
+    for (var i = 0; i < carrito.length; i++) {
+        if (String(carrito[i].id) === id) {
+            repetido = carrito[i];
+        }
+    }
+
+    if (repetido) {
+        repetido.cantidad = repetido.cantidad + cantidad;
+    } else {
+        carrito.push({
+            id:          id,
+            codigo:      producto.codigo,
+            descripcion: producto.descripcion,
+            precio:      parseFloat(producto.precio_usd),
+            cantidad:    cantidad
+        });
+    }
+
+    dibujarDetalle();
+}
+
+/* Busca un producto en el catalogo que PHP dejo en la variable CATALOGO
+   (ver el <script> del final de index.php). No consulta al servidor. */
+function buscarEnCatalogo(id) {
+    for (var i = 0; i < CATALOGO.length; i++) {
+        if (String(CATALOGO[i].id) === String(id)) {
+            return CATALOGO[i];
+        }
+    }
+    return null;
+}
+
+/* El cajero elige el producto de la lista desplegable */
+function agregarDesdeLista() {
+    var lista    = document.getElementById('lista_productos');
+    var cantidad = document.getElementById('cantidad_producto');
+    var producto = buscarEnCatalogo(lista.value);
+
+    if (!producto) {
+        alert('Seleccione un producto de la lista');
+        lista.focus();
         return;
     }
 
-    fetch('api/buscar_producto.php?texto=' + encodeURIComponent(texto))
-        .then(function (respuesta) { return respuesta.json(); })
-        .then(function (datos) {
-            if (!datos.ok) {
-                alert(datos.mensaje);
-                return;
-            }
+    agregarAlCarrito(producto, cantidad.value);
 
-            var producto = datos.producto;
+    // Dejamos la lista lista para el siguiente producto
+    lista.value     = '';
+    cantidad.value  = 1;
+    lista.focus();
+}
 
-            // Si el producto ya esta en la lista, solo le sumamos 1
-            var repetido = null;
-            for (var i = 0; i < carrito.length; i++) {
-                if (carrito[i].id === producto.id) {
-                    repetido = carrito[i];
-                }
-            }
+/* Boton "+ Agregar" de la tabla del catalogo (panel de abajo) */
+function agregarDesdeCatalogo(id) {
+    var producto = buscarEnCatalogo(id);
 
-            if (repetido) {
-                repetido.cantidad = repetido.cantidad + 1;
-            } else {
-                carrito.push({
-                    id:          producto.id,
-                    codigo:      producto.codigo,
-                    descripcion: producto.descripcion,
-                    precio:      parseFloat(producto.precio_usd),
-                    cantidad:    1
-                });
-            }
+    if (!producto) {
+        alert('Producto no encontrado en el catalogo');
+        return;
+    }
 
-            campo.value = '';
-            campo.focus();
-            dibujarDetalle();
-        });
+    agregarAlCarrito(producto, 1);
 }
 
 function cambiarCantidad(indice, nuevaCantidad) {
@@ -251,22 +338,42 @@ function guardarFactura() {
                   'Total: $ ' + resultado.total_usd + '  =  Q ' + resultado.total_gtq + '\n' +
                   'Tipo de cambio usado: ' + resultado.tipo_cambio);
 
-            // Limpiamos la pantalla para la siguiente venta
-            carrito = [];
-            limpiarCliente();
-            document.getElementById('nit').value = '';
-            dibujarDetalle();
+            /* Recargamos la pantalla: asi queda limpia para la siguiente
+               venta y de paso se actualizan el stock del catalogo y la
+               lista de ultimas facturas del panel de abajo. */
+            location.reload();
         });
 }
 
 
 /* ------------------------------------------------------------
-   6. ATAJOS DE TECLADO: Enter para buscar / agregar
+   6. PESTANAS DE LOS PANELES (catalogo / clientes / ultimas facturas)
+   ------------------------------------------------------------ */
+function mostrarPanel(nombre) {
+    var paneles  = ['catalogo', 'clientes', 'facturas'];
+
+    for (var i = 0; i < paneles.length; i++) {
+        var panel   = document.getElementById('panel_'   + paneles[i]);
+        var pestana = document.getElementById('pestana_' + paneles[i]);
+
+        if (paneles[i] === nombre) {
+            panel.classList.remove('oculto');
+            pestana.classList.add('activa');
+        } else {
+            panel.classList.add('oculto');
+            pestana.classList.remove('activa');
+        }
+    }
+}
+
+
+/* ------------------------------------------------------------
+   7. ATAJOS DE TECLADO: Enter para buscar / agregar
    ------------------------------------------------------------ */
 document.getElementById('nit').addEventListener('keypress', function (evento) {
     if (evento.key === 'Enter') { buscarCliente(); }
 });
 
-document.getElementById('buscar_producto').addEventListener('keypress', function (evento) {
-    if (evento.key === 'Enter') { agregarProducto(); }
+document.getElementById('cantidad_producto').addEventListener('keypress', function (evento) {
+    if (evento.key === 'Enter') { agregarDesdeLista(); }
 });
