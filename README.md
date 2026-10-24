@@ -14,6 +14,16 @@ Proyecto 1 (PHP + MySQL) hacia una aplicación en la nube:
 El código PHP del Proyecto 1 (`index.php`, `api/`, `config/`, `includes/`) se
 conserva en la raíz como referencia de la primera fase.
 
+![Arquitectura del sistema](docs/arquitectura.png)
+
+El diagrama está en `docs/arquitectura.svg` (vectorial, para imprimir) y
+`docs/arquitectura.png` (2200×1400, para pegar en el informe).
+
+Lo que conviene notar: la fotografía **sube** pasando por el backend, pero
+**baja** directo del bucket al navegador. El backend firma una URL temporal y se
+aparta; nunca sirve archivos. Por eso en la base de datos se guarda la clave del
+objeto y no la URL.
+
 ---
 
 ## 1. Qué hace el sistema

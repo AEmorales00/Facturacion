@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 700" width="1100" height="700"
+     role="img" font-family="Archivo, system-ui, -apple-system, Segoe UI, sans-serif"
+     aria-label="Arquitectura del sistema de facturacion: el Angular desplegado en Vercel llama por REST a la API de Spring Boot, que guarda en una base de datos en la nube, sube las fotografias a un bucket privado de AWS S3 y consulta el tipo de cambio al Web Service SOAP del Banguat. Las imagenes las carga el navegador directamente desde S3 con una URL firmada, sin pasar por el backend.">
+
+  <defs>
+    <marker id="flecha" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0f3d3e"/>
+    </marker>
+    <marker id="flechaAmbar" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#a86d09"/>
+    </marker>
+  </defs>
+
+  <rect width="1100" height="700" fill="#f2f4f3"/>
+
+  <!-- ===================== Titulo ===================== -->
+  <text x="40" y="36" font-size="21" font-weight="600" fill="#10211f">
+    Sistema de Facturacion &#8212; Arquitectura
+  </text>
+  <text x="40" y="58" font-size="12.5" fill="#5a6b66">
+    Angular 19 &#183; Spring Boot 3.5 &#183; Base de datos en la nube &#183; AWS S3 &#183; Web Service del Banguat
+  </text>
+
+  <!-- ====== 6. Camino directo navegador -> S3 (lo que no es obvio) ====== -->
+  <path d="M 160 196 C 160 130, 320 104, 520 104 C 700 104, 790 120, 833 168"
+        fill="none" stroke="#a86d09" stroke-width="2" stroke-dasharray="7 4"
+        marker-end="url(#flechaAmbar)"/>
+  <text x="520" y="92" font-size="11.5" font-weight="500" fill="#a86d09" text-anchor="middle">
+    6  La imagen se carga directo desde S3, sin pasar por el backend
+  </text>
+
+  <!-- ===================== Navegador ===================== -->
+  <rect x="40" y="200" width="240" height="180" rx="10" fill="#ffffff" stroke="#b3bdb9"/>
+  <text x="62" y="231" font-size="15" font-weight="600" fill="#10211f">Navegador</text>
+  <text x="62" y="250" font-size="11" fill="#5a6b66">Angular 19 (SPA) &#183; Vercel</text>
+  <line x1="62" y1="264" x2="258" y2="264" stroke="#d4dad7"/>
+  <text x="62" y="286" font-size="11.5" fill="#10211f">Catalogo con fotografias</text>
+  <text x="62" y="306" font-size="11.5" fill="#10211f">Facturacion interactiva</text>
+  <text x="62" y="326" font-size="11.5" fill="#10211f">Alta de productos</text>
+  <text x="62" y="346" font-size="11.5" fill="#10211f">Consulta de facturas</text>
+  <text x="62" y="368" font-size="10.5" fill="#5a6b66">No conoce la base de datos</text>
+
+  <!-- ===================== Spring Boot ===================== -->
+  <rect x="440" y="200" width="240" height="180" rx="10" fill="#ffffff" stroke="#0f3d3e" stroke-width="1.5"/>
+  <text x="462" y="231" font-size="15" font-weight="600" fill="#10211f">API REST</text>
+  <text x="462" y="250" font-size="11" fill="#5a6b66">Spring Boot 3.5 &#183; Java 21 &#183; Render</text>
+  <line x1="462" y1="264" x2="658" y2="264" stroke="#d4dad7"/>
+  <text x="462" y="286" font-size="11.5" fill="#10211f">Relee los precios de la BD</text>
+  <text x="462" y="306" font-size="11.5" fill="#10211f">Calcula IVA y convierte a GTQ</text>
+  <text x="462" y="326" font-size="11.5" fill="#10211f">Descuenta inventario</text>
+  <text x="462" y="346" font-size="11.5" fill="#10211f">Firma las URLs de S3</text>
+  <text x="462" y="368" font-size="10.5" fill="#5a6b66">Todo dentro de una transaccion</text>
+
+  <!-- ===================== AWS S3 ===================== -->
+  <rect x="840" y="130" width="230" height="120" rx="10" fill="#ffffff" stroke="#b3bdb9"/>
+  <text x="862" y="161" font-size="15" font-weight="600" fill="#10211f">Amazon S3</text>
+  <text x="862" y="180" font-size="11" fill="#5a6b66">Bucket privado &#183; us-east-1</text>
+  <line x1="862" y1="194" x2="1048" y2="194" stroke="#d4dad7"/>
+  <text x="862" y="216" font-size="11.5" fill="#10211f">Fotografias de productos</text>
+  <text x="862" y="235" font-size="10.5" fill="#5a6b66">productos/&lt;uuid&gt;.jpg</text>
+
+  <!-- ===================== Base de datos ===================== -->
+  <rect x="840" y="290" width="230" height="120" rx="10" fill="#ffffff" stroke="#b3bdb9"/>
+  <text x="862" y="321" font-size="15" font-weight="600" fill="#10211f">Base de datos</text>
+  <text x="862" y="340" font-size="11" fill="#5a6b66">MySQL / PostgreSQL en la nube</text>
+  <line x1="862" y1="354" x2="1048" y2="354" stroke="#d4dad7"/>
+  <text x="862" y="376" font-size="11.5" fill="#10211f">clientes &#183; productos &#183; facturas</text>
+  <text x="862" y="395" font-size="10.5" fill="#5a6b66">factura_detalle &#183; tipo_cambio</text>
+
+  <!-- ===================== Banguat ===================== -->
+  <rect x="440" y="445" width="240" height="105" rx="10" fill="#ffffff" stroke="#b3bdb9"/>
+  <text x="462" y="476" font-size="15" font-weight="600" fill="#10211f">Banco de Guatemala</text>
+  <text x="462" y="495" font-size="11" fill="#5a6b66">Web Service externo &#183; SOAP 1.1</text>
+  <line x1="462" y1="509" x2="658" y2="509" stroke="#d4dad7"/>
+  <text x="462" y="531" font-size="11.5" fill="#10211f">Tipo de cambio del dia</text>
+
+  <!-- ============ 1, 2, 5: navegador <-> API ============ -->
+  <line x1="280" y1="250" x2="434" y2="250" stroke="#0f3d3e" stroke-width="1.6" marker-end="url(#flecha)"/>
+  <text x="357" y="242" font-size="11" font-weight="500" fill="#10211f" text-anchor="middle">1  REST / JSON</text>
+  <text x="357" y="264" font-size="10" fill="#5a6b66" text-anchor="middle">HTTPS + CORS</text>
+
+  <line x1="280" y1="300" x2="434" y2="300" stroke="#0f3d3e" stroke-width="1.6" marker-end="url(#flecha)"/>
+  <text x="357" y="292" font-size="11" font-weight="500" fill="#10211f" text-anchor="middle">2  sube la foto</text>
+  <text x="357" y="314" font-size="10" fill="#5a6b66" text-anchor="middle">multipart/form-data</text>
+
+  <line x1="434" y1="356" x2="280" y2="356" stroke="#0f3d3e" stroke-width="1.6" marker-end="url(#flecha)"/>
+  <text x="357" y="348" font-size="11" font-weight="500" fill="#10211f" text-anchor="middle">5  URL firmada</text>
+  <text x="357" y="370" font-size="10" fill="#5a6b66" text-anchor="middle">vence en 1 hora</text>
+
+  <!-- ============ 3: API -> S3 ============ -->
+  <line x1="680" y1="250" x2="834" y2="205" stroke="#0f3d3e" stroke-width="1.6" marker-end="url(#flecha)"/>
+  <text x="757" y="198" font-size="11" font-weight="500" fill="#10211f" text-anchor="middle">3  putObject</text>
+  <text x="757" y="212" font-size="10" fill="#5a6b66" text-anchor="middle">AWS SDK</text>
+
+  <!-- ============ 4: API -> base de datos ============ -->
+  <line x1="680" y1="320" x2="834" y2="336" stroke="#0f3d3e" stroke-width="1.6" marker-end="url(#flecha)"/>
+  <text x="757" y="300" font-size="11" font-weight="500" fill="#10211f" text-anchor="middle">4  guarda la clave</text>
+  <text x="757" y="314" font-size="10" fill="#5a6b66" text-anchor="middle">JDBC &#183; no la URL</text>
+
+  <!-- ============ 7: API -> Banguat ============ -->
+  <line x1="560" y1="380" x2="560" y2="439" stroke="#0f3d3e" stroke-width="1.6" marker-end="url(#flecha)"/>
+  <text x="575" y="403" font-size="11" font-weight="500" fill="#10211f">7  SOAP</text>
+  <text x="575" y="417" font-size="10" fill="#5a6b66">TipoCambioDia</text>
+
+  <!-- ====== Nota: como se trabaja sin credenciales de AWS ====== -->
+  <line x1="42" y1="448" x2="42" y2="543" stroke="#b3bdb9" stroke-width="2"/>
+  <text x="60" y="464" font-size="11.5" font-weight="600" fill="#10211f">Para desarrollar sin AWS</text>
+  <text x="60" y="484" font-size="11" fill="#5a6b66">La variable ALMACENAMIENTO=local</text>
+  <text x="60" y="501" font-size="11" fill="#5a6b66">guarda las fotos en disco en vez de</text>
+  <text x="60" y="518" font-size="11" fill="#5a6b66">S3. Es la misma interfaz, asi que no</text>
+  <text x="60" y="535" font-size="11" fill="#5a6b66">cambia ninguna otra clase.</text>
+
+  <!-- ===================== Secuencia ===================== -->
+  <line x1="40" y1="582" x2="1060" y2="582" stroke="#d4dad7"/>
+
+  <text x="40" y="606" font-size="11.5" fill="#10211f">
+    <tspan font-weight="600">1</tspan>  El Angular pide catalogo, clientes y facturas a la API.
+  </text>
+  <text x="40" y="628" font-size="11.5" fill="#10211f">
+    <tspan font-weight="600">2</tspan>  Al registrar un producto, la fotografia viaja al backend.
+  </text>
+  <text x="40" y="650" font-size="11.5" fill="#10211f">
+    <tspan font-weight="600">3</tspan>  El backend la sube al bucket; el archivo nunca toca la BD.
+  </text>
+  <text x="40" y="672" font-size="11.5" fill="#10211f">
+    <tspan font-weight="600">4</tspan>  En la BD solo se guarda la clave del objeto en S3.
+  </text>
+
+  <text x="580" y="606" font-size="11.5" fill="#10211f">
+    <tspan font-weight="600">5</tspan>  Al leer un producto, el backend firma una URL temporal.
+  </text>
+  <text x="580" y="628" font-size="11.5" fill="#a86d09">
+    <tspan font-weight="600">6</tspan>  El navegador baja la imagen de S3 por su cuenta: el backend
+  </text>
+  <text x="598" y="645" font-size="11.5" fill="#a86d09">
+    no sirve archivos, solo reparte permisos.
+  </text>
+  <text x="580" y="672" font-size="11.5" fill="#10211f">
+    <tspan font-weight="600">7</tspan>  El tipo de cambio se consulta al Banguat y se cachea por dia.
+  </text>
+</svg>
