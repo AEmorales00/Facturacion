@@ -218,7 +218,7 @@ $ultimas_facturas = $conexion->query(
         </div>
     </div>
 
-    <!-- ----- Panel: clientes ----- -->
+    <!-- ----- Panel: clientes ---- -->
     <div class="panel oculto" id="panel_clientes">
         <table>
             <thead>

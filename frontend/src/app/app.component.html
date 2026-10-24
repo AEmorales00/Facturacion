@@ -1,0 +1,41 @@
+<div class="armazon">
+  <button class="abrir-menu btn-suave" type="button" (click)="alternarMenu()">
+    Menu
+  </button>
+
+  <nav class="rail" [class.rail-abierto]="menuAbierto()" (click)="cerrarMenu()">
+    <div class="marca">
+      <span class="marca-nombre">Facturacion</span>
+      <span class="marca-pie">Catalogo en S3 &middot; Tipo de cambio Banguat</span>
+    </div>
+
+    <ul class="enlaces">
+      <li><a routerLink="/facturacion" routerLinkActive="activo">Facturar</a></li>
+      <li><a routerLink="/catalogo" routerLinkActive="activo">Catalogo</a></li>
+      <li><a routerLink="/productos" routerLinkActive="activo">Productos</a></li>
+      <li><a routerLink="/facturas" routerLinkActive="activo">Facturas emitidas</a></li>
+      <li><a routerLink="/web-service" routerLinkActive="activo">Web Service</a></li>
+    </ul>
+
+    <!-- El tipo de cambio queda a la vista en todas las pantallas: es el
+         numero con el que se convierte cada total de dolares a quetzales. -->
+    <div class="cambio" (click)="$event.stopPropagation()">
+      @if (tipoCambio(); as tc) {
+        <span class="cambio-etiqueta">1 USD equivale a</span>
+        <span class="cambio-valor cifra">Q {{ tc.referencia | number: '1.4-5' }}</span>
+        <span class="cambio-origen">{{ tc.origen }}</span>
+      } @else {
+        <span class="cambio-etiqueta">Tipo de cambio</span>
+        <span class="cambio-valor cifra">consultando&hellip;</span>
+      }
+      <button class="btn-suave cambio-boton" type="button"
+              [disabled]="consultando()" (click)="actualizar(true)">
+        {{ consultando() ? 'Consultando...' : 'Consultar al Banguat' }}
+      </button>
+    </div>
+  </nav>
+
+  <main class="lienzo">
+    <router-outlet />
+  </main>
+</div>

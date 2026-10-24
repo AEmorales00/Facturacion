@@ -1,0 +1,135 @@
+<h1 class="titulo">Facturas emitidas</h1>
+
+<form class="filtros tarjeta" (ngSubmit)="consultar()">
+  <div class="campo">
+    <label for="f-nit">NIT del cliente</label>
+    <input id="f-nit" name="fNit" [(ngModel)]="filtros.nit" placeholder="Todos" />
+  </div>
+  <div class="campo">
+    <label for="f-desde">Desde</label>
+    <input id="f-desde" name="fDesde" type="date" [(ngModel)]="filtros.desde" />
+  </div>
+  <div class="campo">
+    <label for="f-hasta">Hasta</label>
+    <input id="f-hasta" name="fHasta" type="date" [(ngModel)]="filtros.hasta" />
+  </div>
+  <div class="filtros-botones">
+    <button class="btn-principal" type="submit">Consultar</button>
+    @if (hayFiltros()) {
+      <button class="btn-suave" type="button" (click)="limpiar()">Quitar filtros</button>
+    }
+  </div>
+</form>
+
+@if (error()) {
+  <div class="aviso aviso-error">{{ error() }}</div>
+} @else if (cargando()) {
+  <p class="vacio">Consultando&hellip;</p>
+} @else if (!facturas().length) {
+  <p class="vacio tarjeta">
+    <strong>No hay facturas que coincidan</strong>
+    @if (hayFiltros()) {
+      Pruebe con otro NIT o amplie el rango de fechas.
+    } @else {
+      Emita la primera venta desde <a routerLink="/facturacion">Facturar</a>.
+    }
+  </p>
+} @else {
+  <div class="resumen tarjeta">
+    <div>
+      <span class="resumen-etiqueta">Facturas</span>
+      <span class="resumen-valor cifra">{{ facturas().length }}</span>
+    </div>
+    <div>
+      <span class="resumen-etiqueta">Total en dolares</span>
+      <span class="resumen-valor cifra">$ {{ totalUsd() | number: '1.2-2' }}</span>
+    </div>
+    <div>
+      <span class="resumen-etiqueta">Total en quetzales</span>
+      <span class="resumen-valor resumen-valor-fuerte cifra">
+        Q {{ totalGtq() | number: '1.2-2' }}
+      </span>
+    </div>
+  </div>
+
+  <div class="tarjeta desplaza">
+    <table>
+      <thead>
+        <tr>
+          <th class="num">No.</th>
+          <th>Fecha</th>
+          <th>Cliente</th>
+          <th>Pago</th>
+          <th class="num">Cambio</th>
+          <th class="num">Total USD</th>
+          <th class="num">Total GTQ</th>
+          <th><span class="oculto-visual">Detalle</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (f of facturas(); track f.id) {
+          <tr>
+            <td class="num">{{ f.id }}</td>
+            <td class="fecha">{{ f.fecha | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td>
+              {{ f.clienteNombre }}
+              <span class="codigo cifra">{{ f.clienteNit }}</span>
+            </td>
+            <td>{{ f.metodoPago }}</td>
+            <td class="num suave">{{ f.tipoCambio | number: '1.4-5' }}</td>
+            <td class="num">{{ f.totalUsd | number: '1.2-2' }}</td>
+            <td class="num fuerte">{{ f.totalGtq | number: '1.2-2' }}</td>
+            <td class="num">
+              <button class="btn-suave" type="button" (click)="alternarDetalle(f.id)">
+                {{ abierta() === f.id ? 'Ocultar' : 'Ver detalle' }}
+              </button>
+            </td>
+          </tr>
+
+          @if (abierta() === f.id) {
+            <tr class="fila-detalle">
+              <td colspan="8">
+                <table class="detalle">
+                  <thead>
+                    <tr>
+                      <th colspan="2">Producto</th>
+                      <th class="num">Cantidad</th>
+                      <th class="num">Precio</th>
+                      <th class="num">Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (linea of f.detalle; track linea.productoId) {
+                      <tr>
+                        <td class="col-foto">
+                          @if (linea.imagenUrl) {
+                            <img class="miniatura" [src]="linea.imagenUrl"
+                                 [alt]="linea.descripcion" loading="lazy" />
+                          } @else {
+                            <span class="miniatura sin-foto">sin foto</span>
+                          }
+                        </td>
+                        <td>
+                          {{ linea.descripcion }}
+                          <span class="codigo cifra">{{ linea.codigo }}</span>
+                        </td>
+                        <td class="num">{{ linea.cantidad }}</td>
+                        <td class="num">{{ linea.precioUnitarioUsd | number: '1.2-2' }}</td>
+                        <td class="num">{{ linea.subtotalUsd | number: '1.2-2' }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+                <p class="detalle-pie">
+                  Subtotal $ {{ f.subtotalUsd | number: '1.2-2' }} &middot;
+                  IVA $ {{ f.ivaUsd | number: '1.2-2' }} &middot;
+                  Cobrada a Q {{ f.tipoCambio | number: '1.4-5' }} por dolar
+                </p>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+}

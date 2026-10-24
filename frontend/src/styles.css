@@ -1,0 +1,319 @@
+/* ============================================================
+   ESTILOS GLOBALES
+   ------------------------------------------------------------
+   Aqui viven los tokens de diseno (colores, tipografias,
+   espacios) y los elementos que se repiten en todo el sistema:
+   botones, campos, tablas y tarjetas.
+   Lo especifico de cada pantalla va en su propio archivo .css.
+   ============================================================ */
+
+:root {
+  /* Color. Verde profundo de tinta sobre papel frio; el ambar queda
+     reservado para el tipo de cambio en vivo y el carmin para errores. */
+  --tinta: #0f3d3e;
+  --quetzal: #1b6b5a;
+  --quetzal-claro: #e4efea;
+  --ambar: #a86d09;
+  --ambar-claro: #fdf3e0;
+  --carmin: #a4342b;
+  --carmin-claro: #fbeceb;
+
+  --papel: #f2f4f3;
+  --superficie: #ffffff;
+  --superficie-honda: #e8ecea;
+  --borde: #d4dad7;
+  --borde-fuerte: #b3bdb9;
+  --texto: #10211f;
+  --texto-suave: #5a6b66;
+
+  /* Tipografia */
+  --fuente: 'Archivo', system-ui, -apple-system, sans-serif;
+  --fuente-cifras: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* Espacio: escala de 4px */
+  --e1: 4px;
+  --e2: 8px;
+  --e3: 12px;
+  --e4: 16px;
+  --e5: 24px;
+  --e6: 32px;
+  --e7: 48px;
+
+  --radio: 6px;
+  --radio-g: 10px;
+  --sombra: 0 1px 2px rgba(16, 33, 31, 0.06), 0 4px 12px rgba(16, 33, 31, 0.05);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--papel);
+  color: var(--texto);
+  font-family: var(--fuente);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+h2 {
+  font-size: 1.125rem;
+}
+h3 {
+  font-size: 0.9375rem;
+}
+
+p {
+  margin: 0;
+  max-width: 68ch;
+}
+
+a {
+  color: var(--quetzal);
+}
+
+/* Las cifras de dinero y los codigos van en monoespaciada para que las
+   columnas queden alineadas y se puedan comparar de un vistazo. */
+.cifra {
+  font-family: var(--fuente-cifras);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ------------------------------------------------------------ formularios */
+
+label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--texto-suave);
+  margin-bottom: var(--e1);
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 9px var(--e3);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--texto);
+  font-family: inherit;
+  font-size: 0.9375rem;
+}
+
+input[type='number'],
+input[inputmode='decimal'] {
+  font-family: var(--fuente-cifras);
+  font-variant-numeric: tabular-nums;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--quetzal);
+  outline-offset: 1px;
+}
+
+input:disabled,
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.campo {
+  margin-bottom: var(--e4);
+}
+
+/* ---------------------------------------------------------------- botones */
+
+button {
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--radio);
+  border: 1px solid transparent;
+  padding: 9px var(--e4);
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.btn-principal {
+  background: var(--quetzal);
+  color: #fff;
+}
+.btn-principal:hover:not(:disabled) {
+  background: #15584a;
+}
+
+.btn-suave {
+  background: var(--superficie);
+  color: var(--tinta);
+  border-color: var(--borde);
+}
+.btn-suave:hover:not(:disabled) {
+  background: var(--superficie-honda);
+}
+
+.btn-texto {
+  background: none;
+  color: var(--texto-suave);
+  padding: var(--e1) var(--e2);
+}
+.btn-texto:hover:not(:disabled) {
+  color: var(--carmin);
+}
+
+/* --------------------------------------------------------------- bloques */
+
+.tarjeta {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-g);
+}
+
+.tarjeta-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e3);
+  padding: var(--e4) var(--e5);
+  border-bottom: 1px solid var(--borde);
+}
+
+.tarjeta-cuerpo {
+  padding: var(--e5);
+}
+
+/* ---------------------------------------------------------------- tablas */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+th {
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  padding: var(--e2) var(--e3);
+  border-bottom: 1px solid var(--borde);
+  white-space: nowrap;
+}
+
+td {
+  padding: var(--e3);
+  border-bottom: 1px solid var(--borde);
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.num {
+  text-align: right;
+  font-family: var(--fuente-cifras);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------- avisos */
+
+.aviso {
+  padding: var(--e3) var(--e4);
+  border-radius: var(--radio);
+  font-size: 0.875rem;
+  border: 1px solid transparent;
+}
+
+.aviso-error {
+  background: var(--carmin-claro);
+  border-color: #eccac7;
+  color: var(--carmin);
+}
+
+.aviso-bien {
+  background: var(--quetzal-claro);
+  border-color: #bcd8cd;
+  color: var(--quetzal);
+}
+
+/* Pantalla sin contenido: se explica que hacer, no solo que esta vacia. */
+.vacio {
+  padding: var(--e7) var(--e5);
+  text-align: center;
+  color: var(--texto-suave);
+}
+
+.vacio strong {
+  display: block;
+  color: var(--texto);
+  font-weight: 500;
+  margin-bottom: var(--e1);
+}
+
+/* ------------------------------------------------- imagenes de productos */
+
+.miniatura {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radio);
+  object-fit: cover;
+  background: var(--superficie-honda);
+  flex-shrink: 0;
+}
+
+/* Marcador para los productos que todavia no tienen fotografia en S3. */
+.sin-foto {
+  display: grid;
+  place-items: center;
+  background: var(--superficie-honda);
+  color: var(--borde-fuerte);
+  font-size: 0.6875rem;
+  border-radius: var(--radio);
+}
+
+.oculto-visual {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

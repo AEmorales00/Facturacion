@@ -1,0 +1,108 @@
+.cabeza {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--e5);
+  margin-bottom: var(--e5);
+  flex-wrap: wrap;
+}
+
+.subtitulo {
+  margin-top: var(--e1);
+  font-size: 0.875rem;
+  color: var(--texto-suave);
+}
+
+.buscador {
+  display: flex;
+  gap: var(--e2);
+}
+
+.buscador input {
+  width: 220px;
+}
+
+.rejilla {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(212px, 1fr));
+  gap: var(--e4);
+}
+
+.ficha {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ficha-foto {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--superficie-honda);
+  border-bottom: 1px solid var(--borde);
+}
+
+div.ficha-foto {
+  display: grid;
+  place-items: center;
+  font-size: 0.8125rem;
+}
+
+.ficha-cuerpo {
+  padding: var(--e4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--e1);
+  flex: 1;
+}
+
+.ficha-nombre {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.codigo {
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+}
+
+.ficha-precios {
+  margin-top: auto;
+  padding-top: var(--e3);
+  display: flex;
+  align-items: baseline;
+  gap: var(--e2);
+}
+
+.precio-usd {
+  font-size: 1.125rem;
+  color: var(--texto);
+}
+
+.precio-gtq {
+  font-size: 0.875rem;
+  color: var(--quetzal);
+}
+
+.existencias {
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+}
+
+.agotado {
+  color: var(--carmin);
+}
+
+@media (max-width: 640px) {
+  .buscador {
+    width: 100%;
+  }
+
+  .buscador input {
+    flex: 1;
+    width: auto;
+  }
+}

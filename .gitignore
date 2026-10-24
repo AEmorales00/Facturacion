@@ -1,0 +1,29 @@
+# ============================================================
+#  NUNCA SUBIR AL REPOSITORIO
+# ============================================================
+# Credenciales de AWS y de la base de datos.
+.env
+*.env
+!.env.ejemplo
+.aws/
+application-local.properties
+application-secret.properties
+
+# Backend (Java / Maven)
+backend/target/
+backend/uploads/
+backend/datos/
+*.class
+
+# Frontend (Angular / Node)
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json

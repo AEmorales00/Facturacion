@@ -1,0 +1,132 @@
+<h1 class="titulo">Productos</h1>
+<p class="subtitulo">
+  Al guardar, la fotografia viaja al backend de Spring Boot, que la sube al bucket
+  de AWS S3 y guarda la referencia en la base de datos.
+</p>
+
+@if (mensaje()) {
+  <div class="aviso aviso-bien separa">{{ mensaje() }}</div>
+}
+@if (error()) {
+  <div class="aviso aviso-error separa">{{ error() }}</div>
+}
+
+<div class="columnas">
+  <!-- ---------------- Formulario ---------------- -->
+  <section class="tarjeta">
+    <div class="tarjeta-titulo">
+      <h2>{{ editando() ? 'Editar producto' : 'Registrar producto' }}</h2>
+      @if (editando()) {
+        <button class="btn-texto" type="button" (click)="cancelar()">Cancelar</button>
+      }
+    </div>
+
+    <form class="tarjeta-cuerpo" (ngSubmit)="guardar()">
+      <div class="campo">
+        <label for="codigo">Codigo</label>
+        <input id="codigo" name="codigo" required [(ngModel)]="formulario.codigo"
+               placeholder="P001-AZ" />
+      </div>
+
+      <div class="campo">
+        <label for="descripcion">Descripcion</label>
+        <input id="descripcion" name="descripcion" required [(ngModel)]="formulario.descripcion"
+               placeholder="Arroz Gold 2lb" />
+      </div>
+
+      <div class="pareja">
+        <div class="campo">
+          <label for="precio">Precio en dolares</label>
+          <input id="precio" name="precio" type="number" min="0.01" step="0.01" required
+                 [(ngModel)]="formulario.precioUsd" />
+        </div>
+        <div class="campo">
+          <label for="stock">Existencias</label>
+          <input id="stock" name="stock" type="number" min="0" required
+                 [(ngModel)]="formulario.stock" />
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="imagen">Fotografia</label>
+        <input id="imagen" name="imagen" type="file" accept="image/*"
+               (change)="alElegirArchivo($event)" />
+        <span class="ayuda">
+          JPG, PNG o WEBP, hasta 5 MB.
+          {{ editando() ? 'Si no elige una nueva, se conserva la actual.' : '' }}
+        </span>
+      </div>
+
+      @if (vistaPrevia(); as url) {
+        <figure class="previa">
+          <img [src]="url" alt="Vista previa de la fotografia del producto" />
+          <figcaption>
+            {{ archivo ? 'Asi se vera. Todavia no se ha subido.' : 'Fotografia actual en S3.' }}
+          </figcaption>
+        </figure>
+      }
+
+      <button class="btn-principal ancho" type="submit"
+              [disabled]="guardando() || !formulario.codigo || !formulario.descripcion">
+        @if (guardando()) {
+          {{ archivo ? 'Subiendo la imagen...' : 'Guardando...' }}
+        } @else {
+          {{ editando() ? 'Guardar cambios' : 'Registrar producto' }}
+        }
+      </button>
+    </form>
+  </section>
+
+  <!-- ---------------- Listado ---------------- -->
+  <section class="tarjeta">
+    <div class="tarjeta-titulo">
+      <h2>Catalogo registrado</h2>
+      <span class="conteo">{{ productos().length }} producto(s)</span>
+    </div>
+
+    @if (cargando()) {
+      <p class="vacio">Cargando&hellip;</p>
+    } @else if (!productos().length) {
+      <p class="vacio">
+        <strong>El catalogo esta vacio</strong>
+        Registre el primer producto con el formulario de la izquierda.
+      </p>
+    } @else {
+      <div class="desplaza">
+        <table>
+          <thead>
+            <tr>
+              <th colspan="2">Producto</th>
+              <th class="num">Precio</th>
+              <th class="num">Stock</th>
+              <th><span class="oculto-visual">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of productos(); track p.id) {
+              <tr>
+                <td class="col-foto">
+                  @if (p.imagenUrl) {
+                    <img class="miniatura" [src]="p.imagenUrl" [alt]="p.descripcion" loading="lazy" />
+                  } @else {
+                    <span class="miniatura sin-foto">sin foto</span>
+                  }
+                </td>
+                <td>
+                  {{ p.descripcion }}
+                  <span class="codigo cifra">{{ p.codigo }}</span>
+                </td>
+                <td class="num">{{ p.precioUsd | number: '1.2-2' }}</td>
+                <td class="num" [class.agotado]="p.stock <= 0">{{ p.stock }}</td>
+                <td class="acciones">
+                  <button class="btn-suave" type="button" (click)="editar(p)">Editar</button>
+                  <button class="btn-texto" type="button" (click)="eliminar(p)">Borrar</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</div>

@@ -1,0 +1,61 @@
+<header class="cabeza">
+  <div>
+    <h1>Catalogo</h1>
+    <p class="subtitulo">
+      Las fotografias se sirven desde el bucket de AWS S3.
+      @if (productos().length) {
+        {{ conFoto() }} de {{ productos().length }} productos ya tienen fotografia.
+      }
+    </p>
+  </div>
+
+  <div class="buscador">
+    <label class="oculto-visual" for="buscar">Buscar en el catalogo</label>
+    <input id="buscar" name="buscar" [(ngModel)]="texto" (keyup.enter)="cargar()"
+           placeholder="Codigo o nombre" />
+    <button class="btn-principal" type="button" (click)="cargar()">Buscar</button>
+    @if (texto) {
+      <button class="btn-suave" type="button" (click)="limpiar()">Ver todo</button>
+    }
+  </div>
+</header>
+
+@if (error()) {
+  <div class="aviso aviso-error">{{ error() }}</div>
+} @else if (cargando()) {
+  <p class="vacio">Cargando el catalogo&hellip;</p>
+} @else if (!productos().length) {
+  <p class="vacio tarjeta">
+    <strong>No hay productos que coincidan</strong>
+    Pruebe con otro texto o
+    <a routerLink="/productos">registre un producto nuevo</a>.
+  </p>
+} @else {
+  <ul class="rejilla">
+    @for (p of productos(); track p.id) {
+      <li class="ficha tarjeta">
+        @if (p.imagenUrl) {
+          <img class="ficha-foto" [src]="p.imagenUrl" [alt]="p.descripcion" loading="lazy" />
+        } @else {
+          <div class="ficha-foto sin-foto">Sin fotografia</div>
+        }
+
+        <div class="ficha-cuerpo">
+          <h2 class="ficha-nombre">{{ p.descripcion }}</h2>
+          <span class="codigo cifra">{{ p.codigo }}</span>
+
+          <div class="ficha-precios">
+            <span class="precio-usd cifra">$ {{ p.precioUsd | number: '1.2-2' }}</span>
+            <span class="precio-gtq cifra">
+              Q {{ p.precioUsd * (tipoCambio()?.referencia ?? 0) | number: '1.2-2' }}
+            </span>
+          </div>
+
+          <span class="existencias" [class.agotado]="p.stock <= 0">
+            {{ p.stock > 0 ? p.stock + ' en existencia' : 'Agotado' }}
+          </span>
+        </div>
+      </li>
+    }
+  </ul>
+}

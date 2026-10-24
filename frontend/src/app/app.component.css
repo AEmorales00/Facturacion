@@ -1,0 +1,149 @@
+.armazon {
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  min-height: 100vh;
+}
+
+/* ------------------------------------------------------- barra lateral */
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  background: var(--tinta);
+  color: #cfdedb;
+  padding: var(--e5) 0;
+}
+
+.marca {
+  padding: 0 var(--e5) var(--e5);
+}
+
+.marca-nombre {
+  display: block;
+  color: #fff;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.marca-pie {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: #83a39d;
+}
+
+.enlaces {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
+.enlaces a {
+  display: block;
+  padding: 9px var(--e5);
+  color: #cfdedb;
+  text-decoration: none;
+  font-size: 0.9375rem;
+  border-left: 3px solid transparent;
+}
+
+.enlaces a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.enlaces a.activo {
+  color: #fff;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.08);
+  border-left-color: #6fbfa5;
+}
+
+/* El unico acento ambar de la interfaz: marca el dato que llega en vivo
+   desde el Web Service del Banco de Guatemala. */
+.cambio {
+  margin: var(--e5) var(--e4) 0;
+  padding: var(--e4);
+  border-radius: var(--radio-g);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cambio-etiqueta {
+  display: block;
+  font-size: 0.75rem;
+  color: #83a39d;
+}
+
+.cambio-valor {
+  display: block;
+  margin: 2px 0 var(--e1);
+  font-size: 1.375rem;
+  font-weight: 500;
+  color: #f0c069;
+}
+
+.cambio-origen {
+  display: block;
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  color: #83a39d;
+}
+
+.cambio-boton {
+  width: 100%;
+  margin-top: var(--e3);
+  padding: 6px var(--e2);
+  font-size: 0.8125rem;
+  background: transparent;
+  color: #cfdedb;
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.cambio-boton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ------------------------------------------------------------- contenido */
+
+.lienzo {
+  padding: var(--e6);
+  max-width: 1240px;
+  width: 100%;
+}
+
+.abrir-menu {
+  display: none;
+}
+
+/* ------------------------------------------------------------- pantallas */
+
+@media (max-width: 900px) {
+  .armazon {
+    grid-template-columns: 1fr;
+  }
+
+  .abrir-menu {
+    display: block;
+    position: fixed;
+    z-index: 20;
+    top: var(--e3);
+    right: var(--e3);
+  }
+
+  .rail {
+    display: none;
+  }
+
+  .rail-abierto {
+    display: flex;
+  }
+
+  .lienzo {
+    padding: var(--e4);
+    padding-top: var(--e7);
+  }
+}

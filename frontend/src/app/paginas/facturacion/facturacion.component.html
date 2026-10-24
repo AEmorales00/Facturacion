@@ -1,0 +1,342 @@
+@if (emitida(); as f) {
+  <!-- ============ Factura emitida: comprobante ============ -->
+  <section class="comprobante tarjeta">
+    <header class="comprobante-cabeza">
+      <div>
+        <h1>Factura {{ f.id }} emitida</h1>
+        <p class="comprobante-para">
+          {{ f.clienteNombre }} &middot; NIT {{ f.clienteNit }} &middot; {{ f.metodoPago }}
+        </p>
+      </div>
+      <div class="comprobante-total">
+        <span class="comprobante-total-etiqueta">Total cobrado</span>
+        <span class="comprobante-total-valor cifra">Q {{ f.totalGtq | number: '1.2-2' }}</span>
+      </div>
+    </header>
+
+    <table>
+      <thead>
+        <tr>
+          <th colspan="2">Producto</th>
+          <th class="num">Cantidad</th>
+          <th class="num">Precio</th>
+          <th class="num">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (linea of f.detalle; track linea.productoId) {
+          <tr>
+            <td class="col-foto">
+              @if (linea.imagenUrl) {
+                <img class="miniatura" [src]="linea.imagenUrl" [alt]="linea.descripcion" />
+              } @else {
+                <span class="miniatura sin-foto">sin foto</span>
+              }
+            </td>
+            <td>
+              {{ linea.descripcion }}
+              <span class="codigo cifra">{{ linea.codigo }}</span>
+            </td>
+            <td class="num">{{ linea.cantidad }}</td>
+            <td class="num">{{ linea.precioUnitarioUsd | number: '1.2-2' }}</td>
+            <td class="num">{{ linea.subtotalUsd | number: '1.2-2' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <footer class="comprobante-pie">
+      <dl class="resumen">
+        <div><dt>Subtotal</dt><dd class="cifra">$ {{ f.subtotalUsd | number: '1.2-2' }}</dd></div>
+        <div><dt>IVA 12%</dt><dd class="cifra">$ {{ f.ivaUsd | number: '1.2-2' }}</dd></div>
+        <div><dt>Total en dolares</dt><dd class="cifra">$ {{ f.totalUsd | number: '1.2-2' }}</dd></div>
+        <div>
+          <dt>Tipo de cambio aplicado</dt>
+          <dd class="cifra">Q {{ f.tipoCambio | number: '1.4-5' }}</dd>
+        </div>
+      </dl>
+      <div class="comprobante-acciones">
+        <button class="btn-principal" type="button" (click)="nuevaVenta()">Facturar otra venta</button>
+        <button class="btn-suave" type="button" (click)="imprimir()">Imprimir</button>
+      </div>
+    </footer>
+  </section>
+} @else {
+  <!-- ============ Flujo de facturacion ============ -->
+  <h1 class="titulo">Facturar</h1>
+
+  @if (error()) {
+    <div class="aviso aviso-error separa">{{ error() }}</div>
+  }
+
+  <div class="columnas">
+    <!-- -------- Columna izquierda: cliente, busqueda y detalle -------- -->
+    <div class="pila">
+      <section class="tarjeta">
+        <div class="tarjeta-titulo"><h2>Cliente</h2></div>
+        <div class="tarjeta-cuerpo">
+          @if (cliente(); as c) {
+            <div class="cliente-elegido">
+              <div>
+                <strong>{{ c.nombre }}</strong>
+                <span class="cliente-datos">NIT {{ c.nit }} &middot; {{ c.direccion }}</span>
+              </div>
+              <button class="btn-suave" type="button" (click)="cambiarCliente()">Cambiar</button>
+            </div>
+          } @else {
+            <div class="fila-busqueda">
+              <div class="crece">
+                <label for="nit">NIT del cliente</label>
+                <input id="nit" name="nit" [(ngModel)]="textoCliente"
+                       (keyup.enter)="buscarCliente()" placeholder="1234567-8 o CF" />
+              </div>
+              <button class="btn-principal" type="button" (click)="buscarCliente()">Buscar</button>
+            </div>
+
+            @if (errorCliente()) {
+              <p class="aviso aviso-error separa">{{ errorCliente() }}</p>
+              @if (!formularioClienteVisible()) {
+                <button class="btn-suave separa" type="button" (click)="mostrarFormularioCliente()">
+                  Registrar este cliente
+                </button>
+              }
+            }
+
+            @if (formularioClienteVisible()) {
+              <div class="formulario-cliente separa">
+                <div class="campo">
+                  <label for="nuevo-nit">NIT</label>
+                  <input id="nuevo-nit" name="nuevoNit" [(ngModel)]="nuevoCliente.nit" />
+                </div>
+                <div class="campo">
+                  <label for="nuevo-nombre">Nombre</label>
+                  <input id="nuevo-nombre" name="nuevoNombre" [(ngModel)]="nuevoCliente.nombre" />
+                </div>
+                <div class="campo">
+                  <label for="nueva-direccion">Direccion</label>
+                  <input id="nueva-direccion" name="nuevaDireccion" [(ngModel)]="nuevoCliente.direccion" />
+                </div>
+                <div class="campo">
+                  <label for="nuevo-telefono">Telefono</label>
+                  <input id="nuevo-telefono" name="nuevoTelefono" [(ngModel)]="nuevoCliente.telefono" />
+                </div>
+                <button class="btn-principal" type="button"
+                        [disabled]="!nuevoCliente.nit || !nuevoCliente.nombre"
+                        (click)="guardarCliente()">
+                  Guardar cliente
+                </button>
+              </div>
+            }
+          }
+        </div>
+      </section>
+
+      <section class="tarjeta">
+        <div class="tarjeta-titulo"><h2>Buscar producto</h2></div>
+        <div class="tarjeta-cuerpo">
+          <div class="fila-busqueda">
+            <div class="crece">
+              <label for="producto">Codigo o nombre</label>
+              <input id="producto" name="producto" [(ngModel)]="textoProducto"
+                     (keyup.enter)="buscarProducto()" placeholder="P001-AZ o arroz" />
+            </div>
+            <button class="btn-principal" type="button" (click)="buscarProducto()">Buscar</button>
+          </div>
+
+          @if (resultados().length) {
+            <ul class="resultados separa">
+              @for (p of resultados(); track p.id) {
+                <li>
+                  <button class="resultado" type="button"
+                          [class.resultado-activo]="seleccionado()?.id === p.id"
+                          (click)="seleccionar(p)">
+                    @if (p.imagenUrl) {
+                      <img class="miniatura" [src]="p.imagenUrl" [alt]="p.descripcion" />
+                    } @else {
+                      <span class="miniatura sin-foto">sin foto</span>
+                    }
+                    <span class="resultado-texto">
+                      <strong>{{ p.descripcion }}</strong>
+                      <span class="codigo cifra">{{ p.codigo }}</span>
+                    </span>
+                    <span class="resultado-precio cifra">$ {{ p.precioUsd | number: '1.2-2' }}</span>
+                  </button>
+                </li>
+              }
+            </ul>
+          } @else if (buscando()) {
+            <p class="vacio">Buscando&hellip;</p>
+          }
+        </div>
+      </section>
+
+      <section class="tarjeta">
+        <div class="tarjeta-titulo">
+          <h2>Detalle de la factura</h2>
+          @if (carrito().length) {
+            <span class="conteo">{{ carrito().length }} producto(s)</span>
+          }
+        </div>
+
+        @if (carrito().length) {
+          <table>
+            <thead>
+              <tr>
+                <th colspan="2">Producto</th>
+                <th class="num">Cantidad</th>
+                <th class="num">Precio</th>
+                <th class="num">Subtotal</th>
+                <th><span class="oculto-visual">Quitar</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (linea of carrito(); track linea.producto.id) {
+                <tr>
+                  <td class="col-foto">
+                    @if (linea.producto.imagenUrl) {
+                      <img class="miniatura" [src]="linea.producto.imagenUrl"
+                           [alt]="linea.producto.descripcion" />
+                    } @else {
+                      <span class="miniatura sin-foto">sin foto</span>
+                    }
+                  </td>
+                  <td>
+                    {{ linea.producto.descripcion }}
+                    <span class="codigo cifra">{{ linea.producto.codigo }}</span>
+                  </td>
+                  <td class="num">
+                    <input class="cantidad-celda" type="number" min="1"
+                           [max]="linea.producto.stock" [value]="linea.cantidad"
+                           [attr.aria-label]="'Cantidad de ' + linea.producto.descripcion"
+                           (change)="cambiarCantidad(linea.producto.id, $any($event.target).value)" />
+                  </td>
+                  <td class="num">{{ linea.producto.precioUsd | number: '1.2-2' }}</td>
+                  <td class="num">
+                    {{ linea.producto.precioUsd * linea.cantidad | number: '1.2-2' }}
+                  </td>
+                  <td class="num">
+                    <button class="btn-texto" type="button" (click)="quitar(linea.producto.id)"
+                            [attr.aria-label]="'Quitar ' + linea.producto.descripcion">
+                      Quitar
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        } @else {
+          <p class="vacio">
+            <strong>Todavia no hay productos</strong>
+            Busque un producto arriba y agreguelo para empezar la factura.
+          </p>
+        }
+      </section>
+    </div>
+
+    <!-- -------- Columna derecha: vista del producto y total -------- -->
+    <aside class="pila">
+      <section class="tarjeta vista">
+        <div class="tarjeta-titulo"><h2>Producto seleccionado</h2></div>
+
+        @if (seleccionado(); as p) {
+          <div class="vista-cuerpo">
+            @if (p.imagenUrl) {
+              <img class="vista-foto" [src]="p.imagenUrl" [alt]="p.descripcion" />
+            } @else {
+              <div class="vista-foto sin-foto">Este producto aun no tiene fotografia</div>
+            }
+
+            <h3 class="vista-nombre">{{ p.descripcion }}</h3>
+            <span class="codigo cifra">{{ p.codigo }}</span>
+
+            <dl class="vista-datos">
+              <div>
+                <dt>Precio unitario</dt>
+                <dd class="cifra">$ {{ p.precioUsd | number: '1.2-2' }}</dd>
+              </div>
+              <div>
+                <dt>Equivale a</dt>
+                <dd class="cifra">
+                  Q {{ p.precioUsd * (tipoCambio()?.referencia ?? 0) | number: '1.2-2' }}
+                </dd>
+              </div>
+              <div>
+                <dt>Existencias</dt>
+                <dd class="cifra" [class.agotado]="disponible() <= 0">{{ disponible() }}</dd>
+              </div>
+            </dl>
+
+            <div class="vista-agregar">
+              <div>
+                <label for="cantidad">Cantidad</label>
+                <input id="cantidad" name="cantidad" type="number" min="1"
+                       [max]="disponible()" [(ngModel)]="cantidad" />
+              </div>
+              <button class="btn-principal" type="button"
+                      [disabled]="disponible() <= 0" (click)="agregarAlDetalle()">
+                Agregar al detalle
+              </button>
+            </div>
+
+            @if (disponible() <= 0) {
+              <p class="aviso aviso-error separa">
+                No quedan existencias disponibles de este producto.
+              </p>
+            }
+          </div>
+        } @else {
+          <p class="vacio">
+            <strong>Ninguno seleccionado</strong>
+            Al elegir un producto aparecera aqui su fotografia, su precio y lo que hay en existencia.
+          </p>
+        }
+      </section>
+
+      <!-- La pantalla de la caja: el total en quetzales es lo que se cobra. -->
+      <section class="caja">
+        <dl class="caja-desglose">
+          <div><dt>Subtotal</dt><dd class="cifra">$ {{ subtotal() | number: '1.2-2' }}</dd></div>
+          <div><dt>IVA 12%</dt><dd class="cifra">$ {{ iva() | number: '1.2-2' }}</dd></div>
+          <div><dt>Total en dolares</dt><dd class="cifra">$ {{ totalUsd() | number: '1.2-2' }}</dd></div>
+        </dl>
+
+        <div class="caja-total">
+          <span class="caja-total-etiqueta">Total a cobrar</span>
+          <span class="caja-total-valor cifra">Q {{ totalGtq() | number: '1.2-2' }}</span>
+          @if (tipoCambio(); as tc) {
+            <span class="caja-total-formula cifra">
+              {{ totalUsd() | number: '1.2-2' }} &times; {{ tc.referencia | number: '1.4-5' }}
+            </span>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="pago">Metodo de pago</label>
+          <select id="pago" name="pago" [(ngModel)]="metodoPago">
+            <option>Efectivo</option>
+            <option>Tarjeta</option>
+            <option>Transferencia</option>
+          </select>
+        </div>
+
+        <button class="btn-principal caja-emitir" type="button"
+                [disabled]="!cliente() || carrito().length === 0 || emitiendo()"
+                (click)="emitir()">
+          {{ emitiendo() ? 'Emitiendo...' : 'Emitir factura' }}
+        </button>
+
+        @if (!cliente()) {
+          <p class="caja-nota">Falta elegir el cliente.</p>
+        } @else if (carrito().length === 0) {
+          <p class="caja-nota">Agregue al menos un producto.</p>
+        }
+      </section>
+
+      <p class="nota-catalogo">
+        &iquest;No encuentra un producto? Reviselo en el
+        <a routerLink="/catalogo">catalogo</a> o
+        <a routerLink="/productos">registrelo con su fotografia</a>.
+      </p>
+    </aside>
+  </div>
+}

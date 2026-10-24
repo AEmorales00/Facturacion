@@ -1,0 +1,122 @@
+.titulo {
+  margin-bottom: var(--e5);
+}
+
+.filtros {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--e3);
+  padding: var(--e4);
+  margin-bottom: var(--e4);
+  flex-wrap: wrap;
+}
+
+.filtros .campo {
+  margin-bottom: 0;
+}
+
+.filtros input {
+  width: 180px;
+}
+
+.filtros-botones {
+  display: flex;
+  gap: var(--e2);
+  margin-left: auto;
+}
+
+.resumen {
+  display: flex;
+  gap: var(--e7);
+  padding: var(--e4) var(--e5);
+  margin-bottom: var(--e4);
+  flex-wrap: wrap;
+}
+
+.resumen-etiqueta {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+}
+
+.resumen-valor {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.resumen-valor-fuerte {
+  color: var(--quetzal);
+}
+
+.desplaza {
+  overflow-x: auto;
+}
+
+.fecha {
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.codigo {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+}
+
+.suave {
+  color: var(--texto-suave);
+  font-size: 0.8125rem;
+}
+
+.fuerte {
+  font-weight: 500;
+  color: var(--quetzal);
+}
+
+/* Detalle desplegado dentro de la misma fila. */
+.fila-detalle td {
+  background: var(--papel);
+  padding: var(--e4) var(--e5);
+}
+
+.detalle {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  overflow: hidden;
+}
+
+.detalle th {
+  background: var(--superficie);
+}
+
+.col-foto {
+  width: 40px;
+  padding-right: 0;
+}
+
+.detalle-pie {
+  margin-top: var(--e3);
+  font-size: 0.8125rem;
+  color: var(--texto-suave);
+}
+
+@media (max-width: 760px) {
+  .filtros input {
+    width: 100%;
+  }
+
+  .filtros .campo {
+    flex: 1 1 140px;
+  }
+
+  .filtros-botones {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .resumen {
+    gap: var(--e5);
+  }
+}

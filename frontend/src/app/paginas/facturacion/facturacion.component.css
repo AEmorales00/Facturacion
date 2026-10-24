@@ -1,0 +1,374 @@
+.titulo {
+  margin-bottom: var(--e5);
+}
+
+.separa {
+  margin-top: var(--e3);
+}
+
+/* El detalle manda, la vista del producto y la caja acompanan. */
+.columnas {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 1fr);
+  gap: var(--e5);
+  align-items: start;
+}
+
+.pila {
+  display: flex;
+  flex-direction: column;
+  gap: var(--e5);
+  min-width: 0;
+}
+
+/* --------------------------------------------------------------- cliente */
+
+.fila-busqueda {
+  display: flex;
+  gap: var(--e2);
+  align-items: flex-end;
+}
+
+.crece {
+  flex: 1;
+  min-width: 0;
+}
+
+.cliente-elegido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e3);
+}
+
+.cliente-datos {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--texto-suave);
+}
+
+.formulario-cliente {
+  padding-top: var(--e4);
+  border-top: 1px solid var(--borde);
+}
+
+/* ------------------------------------------------------------ resultados */
+
+.resultados {
+  list-style: none;
+  margin: var(--e3) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e1);
+}
+
+.resultado {
+  display: flex;
+  align-items: center;
+  gap: var(--e3);
+  width: 100%;
+  padding: var(--e2);
+  text-align: left;
+  background: none;
+  border: 1px solid transparent;
+}
+
+.resultado:hover {
+  background: var(--superficie-honda);
+}
+
+.resultado-activo {
+  background: var(--quetzal-claro);
+  border-color: #bcd8cd;
+}
+
+.resultado-texto {
+  flex: 1;
+  min-width: 0;
+}
+
+.resultado-texto strong {
+  display: block;
+  font-weight: 500;
+}
+
+.resultado-precio {
+  color: var(--texto-suave);
+}
+
+.codigo {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+}
+
+.conteo {
+  font-size: 0.8125rem;
+  color: var(--texto-suave);
+}
+
+/* ---------------------------------------------------------------- tabla */
+
+.col-foto {
+  width: 40px;
+  padding-right: 0;
+}
+
+.cantidad-celda {
+  width: 68px;
+  padding: 5px var(--e2);
+  text-align: right;
+}
+
+/* ------------------------------------------------- vista del producto */
+
+.vista-cuerpo {
+  padding: var(--e5);
+}
+
+.vista-foto {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radio);
+  background: var(--superficie-honda);
+  margin-bottom: var(--e4);
+}
+
+div.vista-foto {
+  display: grid;
+  place-items: center;
+  padding: var(--e4);
+  text-align: center;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.vista-nombre {
+  font-size: 1rem;
+}
+
+.vista-datos {
+  margin: var(--e4) 0 0;
+  padding: var(--e4) 0 0;
+  border-top: 1px solid var(--borde);
+  display: flex;
+  flex-direction: column;
+  gap: var(--e2);
+}
+
+.vista-datos div,
+.caja-desglose div,
+.resumen div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--e3);
+}
+
+.vista-datos dt,
+.caja-desglose dt,
+.resumen dt {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--texto-suave);
+}
+
+.vista-datos dd,
+.caja-desglose dd,
+.resumen dd {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.agotado {
+  color: var(--carmin);
+  font-weight: 500;
+}
+
+.vista-agregar {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--e2);
+  margin-top: var(--e4);
+  padding-top: var(--e4);
+  border-top: 1px solid var(--borde);
+}
+
+.vista-agregar div {
+  width: 90px;
+}
+
+.vista-agregar button {
+  flex: 1;
+}
+
+/* ------------------------------------------------------------ la caja */
+
+.caja {
+  background: var(--tinta);
+  border-radius: var(--radio-g);
+  padding: var(--e5);
+  color: #cfdedb;
+}
+
+.caja-desglose {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e2);
+}
+
+.caja-desglose dt {
+  color: #83a39d;
+}
+
+.caja-desglose dd {
+  color: #e4ece9;
+}
+
+.caja-total {
+  margin: var(--e4) 0;
+  padding-top: var(--e4);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.caja-total-etiqueta {
+  display: block;
+  font-size: 0.8125rem;
+  color: #83a39d;
+}
+
+.caja-total-valor {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 500;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.caja-total-formula {
+  display: block;
+  margin-top: var(--e1);
+  font-size: 0.75rem;
+  color: #83a39d;
+}
+
+.caja .campo label {
+  color: #83a39d;
+}
+
+.caja-emitir {
+  width: 100%;
+  padding: var(--e3);
+  background: #37a383;
+  color: #06302a;
+  font-weight: 600;
+}
+
+.caja-emitir:hover:not(:disabled) {
+  background: #45b995;
+}
+
+.caja-nota {
+  margin-top: var(--e2);
+  font-size: 0.75rem;
+  color: #83a39d;
+  text-align: center;
+}
+
+.nota-catalogo {
+  font-size: 0.8125rem;
+  color: var(--texto-suave);
+}
+
+/* ---------------------------------------------------------- comprobante */
+
+.comprobante {
+  max-width: 760px;
+}
+
+.comprobante-cabeza {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--e5);
+  padding: var(--e5);
+  border-bottom: 1px solid var(--borde);
+}
+
+.comprobante-para {
+  margin-top: var(--e1);
+  font-size: 0.875rem;
+  color: var(--texto-suave);
+}
+
+.comprobante-total {
+  text-align: right;
+}
+
+.comprobante-total-etiqueta {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--texto-suave);
+}
+
+.comprobante-total-valor {
+  display: block;
+  font-size: 1.875rem;
+  font-weight: 500;
+  color: var(--quetzal);
+}
+
+.comprobante-pie {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--e5);
+  padding: var(--e5);
+  border-top: 1px solid var(--borde);
+}
+
+.resumen {
+  margin: 0;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e2);
+}
+
+.comprobante-acciones {
+  display: flex;
+  gap: var(--e2);
+}
+
+/* ------------------------------------------------------------ pantallas */
+
+@media (max-width: 1040px) {
+  .columnas {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .comprobante-cabeza,
+  .comprobante-pie {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .comprobante-total {
+    text-align: left;
+  }
+}
+
+/* Al imprimir solo interesa el comprobante. */
+@media print {
+  .comprobante-acciones {
+    display: none;
+  }
+
+  .comprobante {
+    border: none;
+  }
+}

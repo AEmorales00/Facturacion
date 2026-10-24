@@ -1,0 +1,134 @@
+.cabeza {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--e5);
+  margin-bottom: var(--e5);
+  flex-wrap: wrap;
+}
+
+.subtitulo {
+  margin-top: var(--e1);
+  font-size: 0.875rem;
+  color: var(--texto-suave);
+}
+
+/* El valor recien traido del Banguat: el ambar es el color reservado
+   para el dato que llega en vivo desde el Web Service. */
+.extraido {
+  padding: var(--e5);
+  margin-bottom: var(--e4);
+  border-radius: var(--radio-g);
+  background: var(--ambar-claro);
+  border: 1px solid #efd9ac;
+}
+
+.extraido-falla {
+  background: var(--carmin-claro);
+  border-color: #eccac7;
+}
+
+.extraido-etiqueta {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--ambar);
+}
+
+.extraido-falla .extraido-etiqueta,
+.extraido-falla .extraido-valor {
+  color: var(--carmin);
+}
+
+.extraido-valor {
+  display: block;
+  font-size: 2.75rem;
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--ambar);
+}
+
+.extraido-pie {
+  display: block;
+  margin-top: var(--e1);
+  font-size: 0.8125rem;
+  color: var(--texto-suave);
+  max-width: 62ch;
+}
+
+.ficha-tecnica {
+  margin: 0 0 var(--e4);
+  padding: var(--e4) var(--e5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--e2);
+}
+
+.ficha-tecnica div {
+  display: flex;
+  gap: var(--e4);
+  align-items: baseline;
+}
+
+.ficha-tecnica dt {
+  width: 190px;
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+  color: var(--texto-suave);
+}
+
+.ficha-tecnica dd {
+  margin: 0;
+  font-size: 0.8125rem;
+  word-break: break-all;
+}
+
+.intercambio {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--e4);
+  align-items: start;
+}
+
+.xml {
+  margin: 0;
+  padding: var(--e4);
+  overflow-x: auto;
+  font-family: var(--fuente-cifras);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--tinta);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.conversion {
+  margin-top: var(--e4);
+}
+
+.formula {
+  margin-top: var(--e4);
+  padding: var(--e4);
+  border-radius: var(--radio);
+  background: var(--papel);
+  font-size: 1.125rem;
+}
+
+.formula strong {
+  color: var(--quetzal);
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .intercambio {
+    grid-template-columns: 1fr;
+  }
+
+  .ficha-tecnica div {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .ficha-tecnica dt {
+    width: auto;
+  }
+}

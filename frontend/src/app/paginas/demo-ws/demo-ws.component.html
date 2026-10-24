@@ -1,0 +1,93 @@
+<header class="cabeza">
+  <div>
+    <h1>Web Service del Banco de Guatemala</h1>
+    <p class="subtitulo">
+      De donde sale el tipo de cambio con el que se convierte cada factura a quetzales.
+    </p>
+  </div>
+  <button class="btn-principal" type="button" [disabled]="cargando()" (click)="consultar()">
+    {{ cargando() ? 'Consultando...' : 'Consultar de nuevo' }}
+  </button>
+</header>
+
+@if (error()) {
+  <div class="aviso aviso-error">{{ error() }}</div>
+} @else if (!demo()) {
+  <p class="vacio">Llamando al Banguat&hellip;</p>
+}
+
+@if (demo(); as d) {
+  <!-- El dato extraido es lo primero que se ve: es el resultado de todo esto. -->
+  <section class="extraido" [class.extraido-falla]="!d.referencia">
+    @if (d.referencia) {
+      <span class="extraido-etiqueta">Tipo de cambio del dia, recien consultado</span>
+      <span class="extraido-valor cifra">Q {{ d.referencia | number: '1.4-5' }}</span>
+      <span class="extraido-pie">
+        Es el contenido de la etiqueta &lt;referencia&gt; del XML de respuesta.
+      </span>
+    } @else {
+      <span class="extraido-etiqueta">El Banguat no respondio</span>
+      <span class="extraido-valor cifra">sin dato</span>
+      <span class="extraido-pie">
+        {{ d.error ?? 'La respuesta no traia el tipo de cambio.' }}
+        El sistema sigue facturando con el ultimo valor guardado en la base de datos.
+      </span>
+    }
+  </section>
+
+  <dl class="ficha-tecnica tarjeta">
+    <div>
+      <dt>Direccion del servicio</dt>
+      <dd class="cifra">{{ d.url }}</dd>
+    </div>
+    <div>
+      <dt>Metodo SOAP invocado</dt>
+      <dd class="cifra">{{ d.accionSoap }}</dd>
+    </div>
+    <div>
+      <dt>Protocolo</dt>
+      <dd>SOAP 1.1 sobre HTTPS, con POST</dd>
+    </div>
+  </dl>
+
+  <div class="intercambio">
+    <section class="tarjeta">
+      <div class="tarjeta-titulo">
+        <h2>1. Lo que envia el backend</h2>
+      </div>
+      <pre class="xml"><code>{{ d.xmlEnviado }}</code></pre>
+    </section>
+
+    <section class="tarjeta">
+      <div class="tarjeta-titulo">
+        <h2>2. Lo que responde el Banguat</h2>
+      </div>
+      @if (d.xmlRecibido) {
+        <pre class="xml"><code>{{ d.xmlRecibido }}</code></pre>
+      } @else {
+        <p class="vacio">No hubo respuesta.</p>
+      }
+    </section>
+  </div>
+
+  @if (d.referencia) {
+    <section class="tarjeta conversion">
+      <div class="tarjeta-titulo">
+        <h2>3. Como se aplica a la factura</h2>
+      </div>
+      <div class="tarjeta-cuerpo">
+        <p>
+          Los precios del catalogo estan en dolares. Al emitir una factura el backend
+          multiplica el total por este valor y guarda ambas cifras, junto con el tipo de
+          cambio usado: si manana el Banguat da otro numero, la factura de hoy conserva
+          el que se cobro.
+        </p>
+        <p class="formula cifra">
+          $ {{ ejemploUsd | number: '1.2-2' }}
+          &times; {{ d.referencia | number: '1.4-5' }}
+          = <strong>Q {{ ejemploUsd * d.referencia | number: '1.2-2' }}</strong>
+        </p>
+      </div>
+    </section>
+  }
+}
